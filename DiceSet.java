@@ -1,87 +1,89 @@
+import java.util.*;
+
 /**
  * A dice set holds a collection of Die objects. All of the die objects have
  * the same number of sides.
  */
 public class DiceSet {
+    private Die[] diceSet;
 
-    // TODO add fields
-
-    /**
-     * Creates a DiceSet containing the given number of dice, each with the
-     * given number of sides. All die values start off as 1. Throws an
-     * IllegalArgumentException if either less than two dice were provided
-     * or if it is asked to make dice with less than 4 sides.
-     */
     public DiceSet(int sidesOnEachDie, int numberOfDice) {
-        // TODO
+        if (numberOfDice < 2)
+            throw new IllegalArgumentException ("At least two dice required");
+        if (sidesOnEachDie < 4)
+            throw new IllegalArgumentException ("Dice must have at least four sides");
+
+        diceSet = new Die[numberOfDice];
+        for (int i = 0; i < numberOfDice; i++)
+            diceSet[i] = new Die(sidesOnEachDie, 1);
     }
 
-    /**
-     * Creates a DiceSet where each die has the given number of sides, with the
-     * given values.
-     */
     public DiceSet(int sidesOnEachDie, int... values) {
-        // TODO
+        for (int i = 0; i < values.length; i++) {
+          if (sidesOnEachDie < 4 && values[i] > sidesOnEachDie)
+              throw new IllegalArgumentException ("Die value not legal for die shape");
+        }
+        if (values.length < 2)
+            throw new IllegalArgumentException ("At least two dice required");
+
+        diceSet = new Die[values.length];
+        for (int i = 0; i < values.length; i++)
+            diceSet[i] = new Die(sidesOnEachDie, values[i]);
     }
 
-    /**
-     * Returns the descriptor of the dice set; for example "5d20" for a set with
-     * five dice of 20 sides each; or "2d6" for a set of two six-sided dice.
-     */
     public String descriptor() {
-        // TODO
+        return (diceSet.length + "d" + diceSet[0].getSides());
     }
 
-    /**
-     * Returns the sum of the values of each die in the set.
-     */
     public int sum() {
-        // TODO
+        var sum = 0;
+        for (int i = 0; i < diceSet.length; i++) {
+            sum += diceSet[i].getValue();
+        }
+        return sum;
     }
 
-    /**
-     * Rolls all the dice in the set.
-     */
     public void rollAll() {
-        // TODO
+        for (int i = 0; i < diceSet.length; i++) {
+            diceSet[i].roll();
+        }
     }
 
-    /**
-     * Rolls the ith die, updating its value.
-     */
     public void rollIndividual(int i) {
-        // TODO
+        diceSet[i].roll();
     }
 
-    /**
-     * Returns the value of the ith die.
-     */
     public int getIndividual(int i) {
-        // TODO
+        return diceSet[i].getValue();
     }
 
-    /**
-     * Returns the values of each of the dice in a list.
-     */
     public List<Integer> values() {
-        // TODO
+        ArrayList<Integer> values = new ArrayList<Integer>();
+        for (int i = 0; i < diceSet.length; i++)
+            values.add(diceSet[i].getValue());
+        return values;
     }
 
-    /**
-     * Returns whether this dice set has the same distribution of values as
-     * an other dice set. The two dice sets must have the same number of dice
-     * and the same number of sides per dice, and there must be the same
-     * number of each value in each set.
-     */
     public boolean isIdenticalTo(DiceSet diceSet) {
-        // TODO
+        boolean isIdentical = false;
+        if (this.diceSet.length != diceSet.diceSet.length ||
+            this.diceSet[0].getSides() != diceSet.diceSet[0].getSides())
+            isIdentical = false;
+
+        List<Integer> set1 = this.values();
+        List<Integer> set2 = diceSet.values();
+        Collections.sort(set1);
+        Collections.sort(set2);
+        if (set1.equals(set2))
+            isIdentical = true;
+
+        return isIdentical;
     }
 
-    /**
-     * Returns a string representation in which each of the die strings are
-     * joined without a separator, for example: "[2][5][2][3]".
-     */
     @Override public String toString() {
-        // TODO
+        String message = "";
+        for (int i = 0; i < diceSet.length; i++)
+            message += "[" + diceSet[i].getValue() + "]";
+        return message;
     }
 }

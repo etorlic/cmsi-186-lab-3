@@ -26,8 +26,10 @@ public class HighRollerGame {
                     if (diceSet == null) {
                         throw new IllegalStateException("You don't have any dice yet");
                     }
-                    // TODO: Roll all, sum them up, and update the highest score so far
-                    // if necessary, and then print out the dice set
+                    diceSet.rollAll();
+                    if (diceSet.sum() > highest)
+                        highest = diceSet.sum();
+                    System.out.println(diceSet.toString());
                 } else if (command.matches("roll\\s+\\d+")) {
                     if (diceSet == null) {
                         throw new IllegalStateException("You don't have any dice yet");
@@ -37,9 +39,9 @@ public class HighRollerGame {
                     System.out.println(diceSet);
                 } else if (command.matches("high(est)?")) {
                     if (highest == 0) {
-                        // TODO: Print that there is no highest score yet
+                        System.out.println("No high score registered yet");
                     } else {
-                        // TODO: Print the highest score so far
+                        System.out.println("Highest score so far is " + highest);
                     }
                 } else {
                     System.out.println("I don't understand");
@@ -51,6 +53,11 @@ public class HighRollerGame {
     }
 
     private static void showHelp() {
-        // TODO: Add lines to print out the help menu as shown on the lab instructions
+        System.out.println("h or help       : Prints this message");
+        System.out.println("q or quit       : Quits the program");
+        System.out.println("use <n> <s>     : Get a new dice set with n dice of s sides each");
+        System.out.println("roll all        : Roll all the dice in your current dice set");
+        System.out.println("roll <i>        : Roll the ith die of your current dice set");
+        System.out.println("high or highest : Prints the highest roll so far");
     }
 }
